@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.aibridge"
@@ -24,10 +23,6 @@ dependencies {
     // JSON Processing
     implementation("com.google.code.gson:gson:2.10.1")
     
-    // Logging
-    implementation("org.slf4j:slf4j-api:2.0.11")
-    implementation("ch.qos.logback:logback-classic:1.4.14")
-    
     // Apache Commons
     implementation("commons-io:commons-io:2.15.1")
     implementation("commons-codec:commons-codec:1.16.0")
@@ -37,18 +32,15 @@ dependencies {
 }
 
 tasks {
-    build {
-        dependsOn(shadowJar)
-    }
-
-    shadowJar {
-        archiveClassifier.set("")
-        destinationDirectory.set(file("$buildDir/libs"))
-        
-        relocate("org.java_websocket", "com.aibridge.lib.websocket")
-        relocate("com.google.gson", "com.aibridge.lib.gson")
-        relocate("org.slf4j", "com.aibridge.lib.slf4j")
-        relocate("ch.qos.logback", "com.aibridge.lib.logback")
+    jar {
+        archiveFileName.set("AIBridge-1.0.0.jar")
+        manifest {
+            attributes(
+                "Main-Class" to "com.aibridge.AIBridgePlugin",
+                "Implementation-Title" to "AIBridge",
+                "Implementation-Version" to "1.0.0"
+            )
+        }
     }
 
     compileJava {
